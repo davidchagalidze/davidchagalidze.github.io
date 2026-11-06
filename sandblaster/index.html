@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+<meta name="theme-color" content="#0b0f14" />
+<meta name="description" content="Sandblaster — пескоструйная кабина: струя стирает ржавчину, заказ платит за зачистку, деньги идут в сопло, компрессор и абразив." />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<title>Sandblaster — струя, ржавчина, деньги</title>
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" href="icons/icon-192.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="app">
+
+  <!-- ═══ Меню ═══ -->
+  <section id="screen-menu" class="screen menu">
+    <div class="logo">
+      <h1>SAND<span>BLASTER</span></h1>
+      <p class="tagline">Струя · чистый металл · касса · апгрейд</p>
+    </div>
+    <div class="menu-card">
+      <button id="btn-continue" class="btn primary big hidden">Продолжить заказ</button>
+      <button id="btn-play" class="btn primary big">Взять заказ</button>
+      <div id="menu-stats" class="menu-stats"></div>
+      <p class="hint small">
+        Веди сопло мышью (на телефоне — тяни пальцем), держи ЛКМ / палец, чтобы песочить.
+        Пятно идёт за прицелом с задержкой — струя летит не мгновенно. Сдавай на 95%:
+        последние проценты стоят дороже, чем платят.
+      </p>
+      <button id="btn-reset" class="btn tiny ghost">Сбросить прогресс</button>
+    </div>
+  </section>
+
+  <!-- ═══ Игра ═══ -->
+  <section id="screen-game" class="screen game hidden">
+    <div class="arena">
+      <canvas id="canvas"></canvas>
+      <div id="hud-top" class="hud-top">
+        <div class="chip money"><span>Касса</span><b id="hud-money">$0</b></div>
+        <div class="chip"><span id="hud-class">Б/у запчасти</span><b id="hud-item">Капот</b></div>
+        <div class="chip"><span>База заказа</span><b id="hud-base">$0</b></div>
+        <button id="btn-shop-top" class="btn tiny">🛠 Цех</button>
+      </div>
+      <div id="dry-warn" class="warn hidden">Бункер пуст — струя не режет. Заправь абразив.</div>
+      <div id="toasts" class="toasts"></div>
+    </div>
+
+    <div id="dock" class="dock">
+      <div class="gauges">
+        <div class="gauge">
+          <span class="k">Зачистка</span><b id="g-clean">0%</b>
+          <div class="bar"><i id="g-clean-bar"></i></div>
+        </div>
+        <div class="gauge">
+          <span class="k">Абразив</span><b id="g-abrasive">0 / 0 кг</b>
+          <div class="bar sand"><i id="g-abrasive-bar"></i></div>
+        </div>
+        <div class="gauge">
+          <span class="k">Счёт за свет</span><b id="g-energy">$0.00</b>
+          <div class="bar elec"><i id="g-energy-bar"></i></div>
+        </div>
+      </div>
+
+      <div class="dock-actions">
+        <button id="btn-refill" class="btn">Заправить <i id="refill-label">10 кг</i></button>
+        <button id="btn-deliver" class="btn primary" disabled>Сдать · нужен ≥95%</button>
+      </div>
+
+      <div id="techline" class="techline"></div>
+      <div id="type-breakdown" class="type-breakdown"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ Цех (магазин) ═══ -->
+<div id="sheet" class="sheet hidden" role="dialog" aria-modal="true" aria-label="Цех">
+  <div class="sheet-head">
+    <div>
+      <h2>Цех</h2>
+      <p class="hint" id="sheet-sub">Апгрейды и склад</p>
+    </div>
+    <div class="sheet-money"><span>Касса</span><b id="sheet-money">$0</b></div>
+    <button id="btn-sheet-close" class="btn tiny ghost" aria-label="Закрыть">✕</button>
+  </div>
+  <div class="sheet-body">
+    <section id="shop-axes" class="shop-axes"></section>
+    <section class="shop-stock">
+      <h3>Склад</h3>
+      <div id="stock-rows" class="stock-rows"></div>
+    </section>
+    <p class="hint small" id="shop-note"></p>
+  </div>
+</div>
+
+<!-- ═══ Модальное окно ═══ -->
+<div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+  <div class="modal-card">
+    <h2 id="modal-title">Заголовок</h2>
+    <div id="modal-body"></div>
+    <div id="modal-actions" class="modal-actions"></div>
+  </div>
+</div>
+
+<script type="module" src="src/main.mjs"></script>
+</body>
+</html>
