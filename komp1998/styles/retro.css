@@ -1,0 +1,613 @@
+/* «Компьютерщик'98» — оформление в духе Windows 95 / 256 цветов.
+   Никаких внешних шрифтов и картинок: только системные шрифты и CSS. */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  background: #008080;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0 1px, transparent 1px 3px);
+  color: #000;
+  font-family: "MS Sans Serif", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 13px;
+  line-height: 1.35;
+  -webkit-font-smoothing: none;
+}
+
+.crt {
+  min-height: 100vh;
+  padding: 10px;
+}
+
+.desktop {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+/* --- Окно --- */
+
+.window {
+  background: #c0c0c0;
+  border: 1px solid #000;
+  box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080;
+  padding: 3px;
+}
+
+.app-window {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 20px);
+}
+
+.titlebar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 3px;
+  background: linear-gradient(90deg, #000080 0%, #1084d0 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+  user-select: none;
+}
+
+.titlebar-icon { font-size: 12px; }
+.titlebar-text { letter-spacing: 0.4px; }
+.titlebar-spacer { flex: 1; }
+
+.titlebar-date {
+  font-weight: 400;
+  font-size: 12px;
+  padding-right: 6px;
+  color: #e8e8ff;
+}
+
+.titlebar-buttons { display: flex; gap: 2px; }
+
+.tb-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 16px;
+  background: #c0c0c0;
+  color: #000;
+  border: 1px solid #000;
+  box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #808080;
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.window-body {
+  flex: 1;
+  padding: 8px;
+  overflow: auto;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 268px minmax(0, 1fr) 320px;
+  gap: 10px;
+  align-items: start;
+}
+
+.col { min-width: 0; }
+
+/* --- Группы и панели --- */
+
+.group {
+  border: 2px groove #dfdfdf;
+  background: #c0c0c0;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.group-title {
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0 4px;
+  margin: -16px 0 6px 2px;
+  background: #c0c0c0;
+  float: left;
+  clear: both;
+}
+
+.group-title::after { content: ""; display: block; }
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  padding: 2px 0;
+  font-size: 13px;
+}
+
+.row .label { color: #404040; }
+.row .value { font-family: "Courier New", monospace; font-weight: 700; }
+.value-good { color: #006000; }
+.value-bad { color: #a00000; }
+
+.hr {
+  height: 0;
+  border-top: 1px solid #808080;
+  border-bottom: 1px solid #fff;
+  margin: 6px 0;
+}
+
+/* --- Полоски --- */
+
+.bar-block { margin: 6px 0 8px; }
+
+.bar-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-bottom: 2px;
+}
+
+.bar {
+  position: relative;
+  height: 14px;
+  background: #808080;
+  border: 1px solid #000;
+  box-shadow: inset 1px 1px 0 #404040, inset -1px -1px 0 #dfdfdf;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: #000080;
+  transition: width 120ms linear;
+}
+
+.bar-fill.mood { background: #008000; }
+.bar-fill.energy { background: #c0a000; }
+.bar-fill.knowledge { background: #000080; }
+.bar-fill.low { background: #a00000; }
+
+.bar-ticks {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(90deg, transparent 0 9px, rgba(192, 192, 192, 0.55) 9px 10px);
+  pointer-events: none;
+}
+
+/* --- Кнопки --- */
+
+button {
+  font: inherit;
+  font-size: 12px;
+  color: #000;
+  background: #c0c0c0;
+  border: 1px solid #000;
+  box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #808080;
+  padding: 4px 9px;
+  cursor: pointer;
+  min-height: 24px;
+}
+
+button:hover:not(:disabled) { background: #d4d0c8; }
+
+button:active:not(:disabled) {
+  box-shadow: inset -1px -1px 0 #fff, inset 1px 1px 0 #808080;
+  padding: 5px 8px 3px 10px;
+}
+
+button:disabled {
+  color: #808080;
+  text-shadow: 1px 1px 0 #fff;
+  cursor: not-allowed;
+}
+
+button.primary { font-weight: 700; }
+
+button.wide { width: 100%; text-align: left; }
+
+button:focus-visible,
+.tb-btn:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: -4px;
+}
+
+/* --- Действия --- */
+
+.actions {
+  display: grid;
+  /* Grid-контейнер по умолчанию сжимается до min-content внутри группы,
+     из-за чего на узком экране кнопки схлопывались в полоски 18 px.
+     Явная ширина родителя возвращает нормальные кнопки на 375/390. */
+  width: 100%;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.action-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-start;
+  padding: 6px 8px;
+  min-height: 44px;
+  font-size: 13px;
+}
+
+.action-btn small {
+  font-size: 11px;
+  color: #404040;
+  font-weight: 400;
+}
+
+.action-btn:disabled small { color: #808080; }
+
+.actions .span-2 { grid-column: span 2; }
+
+/* --- Железо --- */
+
+.spec-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.spec-table td { padding: 2px 0; vertical-align: top; }
+
+.spec-table td.spec-label {
+  color: #404040;
+  width: 38%;
+}
+
+.spec-table td.spec-value { font-family: "Courier New", monospace; }
+
+.spec-value .missing { color: #a00000; }
+
+.warn-box {
+  border: 1px solid #808080;
+  background: #ffffc0;
+  padding: 4px 6px;
+  margin-top: 6px;
+  font-size: 11.5px;
+  color: #604000;
+}
+
+.warn-box ul { margin: 0; padding-left: 16px; }
+
+/* --- Журнал --- */
+
+.log {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 62vh;
+  overflow-y: auto;
+  border: 1px solid #808080;
+  box-shadow: inset 1px 1px 0 #404040;
+  background: #dfdfdf;
+}
+
+.log li {
+  display: flex;
+  gap: 6px;
+  padding: 3px 5px;
+  border-bottom: 1px dotted #a0a0a0;
+  font-size: 12px;
+}
+
+.log li:last-child { border-bottom: 0; }
+
+.log .log-day {
+  font-family: "Courier New", monospace;
+  color: #606060;
+  flex: 0 0 auto;
+  font-size: 11px;
+  padding-top: 1px;
+}
+
+.log li.good { background: #e8ffe8; }
+.log li.bad { background: #ffe8e8; }
+.log li.money { background: #fff8d8; }
+
+/* v3.6: карточка рэкета — запись в журнале с кнопками, не модалка. */
+.log li.racket-card {
+  display: block;
+  background: #fff0e0;
+  border: 1px solid #a05000;
+  box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #c08040;
+  margin: 2px;
+  padding: 5px;
+}
+.log li.racket-card .racket-title {
+  font-weight: bold;
+  color: #802000;
+  font-size: 12px;
+  margin-bottom: 3px;
+}
+.log li.racket-card .racket-text {
+  font-size: 12px;
+  line-height: 1.35;
+  margin-bottom: 5px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.log li.racket-card .racket-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.log li.racket-card .racket-actions button {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: normal;
+  font-size: 11px;
+  padding: 3px 6px;
+}
+.log li.racket-card .racket-actions button small {
+  display: block;
+  font-size: 10px;
+  color: #606060;
+}
+.log li.racket-card .racket-actions button:disabled small { color: #808080; }
+
+@media (max-width: 480px) {
+  .log li.racket-card .racket-actions button { flex: 1 1 100%; }
+}
+
+/* --- Статусная строка --- */
+
+.statusbar {
+  display: flex;
+  gap: 3px;
+  padding: 3px;
+  border-top: 1px solid #fff;
+  background: #c0c0c0;
+}
+
+.status-cell {
+  border: 1px solid;
+  border-color: #808080 #fff #fff #808080;
+  padding: 2px 6px;
+  font-size: 11.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status-cell-grow { flex: 1; min-width: 0; }
+
+/* --- Диалоги --- */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 50;
+  overscroll-behavior: contain;
+}
+
+.overlay.hidden { display: none; }
+
+.dialog {
+  width: min(860px, 100%);
+  /* Окно никогда не занимает весь экран: на телефоне адресная строка и
+     клавиатура съедают низ, и кнопка «Закрыть» уезжает под тулбар браузера. */
+  max-height: min(90vh, 832px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080, 3px 3px 0 rgba(0, 0, 0, 0.35);
+}
+
+.dialog.narrow { width: min(460px, 100%); }
+
+/* Шапка с «×» и подвал с «Закрыть» прилипают к краям окна: они видны всегда,
+   даже когда список внутри прокручен до конца. */
+.dialog .titlebar {
+  flex: 0 0 auto;
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+
+.dialog-body {
+  padding: 10px;
+  flex: 1 1 auto;
+  /* min-height: 0 обязателен: без него flex-элемент не сжимается ниже своего
+     контента, и список вылезает за окно вместо внутренней прокрутки. */
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.dialog-close {
+  width: 20px;
+  height: 16px;
+  padding: 0;
+  min-height: 0;
+  font-family: "Courier New", monospace;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px 4px;
+  border-top: 1px solid #808080;
+  box-shadow: 0 -1px 0 #fff inset;
+  background: #c0c0c0;
+  flex: 0 0 auto;
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+}
+
+.dialog-actions .spacer { flex: 1; }
+
+/* Таблицы магазина */
+
+table.grid {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+table.grid th {
+  text-align: left;
+  background: #c0c0c0;
+  border: 1px solid #808080;
+  border-color: #dfdfdf #808080 #808080 #dfdfdf;
+  padding: 3px 5px;
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+table.grid td {
+  border-bottom: 1px solid #b0b0b0;
+  padding: 4px 5px;
+  vertical-align: middle;
+}
+
+table.grid tr.installed td { background: #d8e8d8; }
+table.grid tr.locked td { color: #606060; }
+table.grid tr.slot-head td {
+  background: #b8b8b8;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  padding: 3px 5px;
+}
+
+.num { font-family: "Courier New", monospace; white-space: nowrap; }
+.muted { color: #606060; }
+.small { font-size: 11px; }
+.tag {
+  display: inline-block;
+  padding: 1px 5px;
+  border: 1px solid #808080;
+  background: #d8ffd8;
+  font-size: 10.5px;
+  white-space: nowrap;
+}
+.tag.bad { background: #ffe0e0; border-color: #a00000; color: #800000; }
+.tag.warn { background: #fff0c0; border-color: #806000; color: #604000; }
+
+.reason-list {
+  margin: 0;
+  padding-left: 16px;
+  color: #800000;
+  font-size: 11.5px;
+}
+
+/* Итоги */
+
+.final-box {
+  text-align: center;
+  padding: 6px 0 12px;
+}
+
+.final-rank {
+  font-size: 24px;
+  font-weight: 700;
+  font-family: "Courier New", monospace;
+  color: #000080;
+  letter-spacing: 1px;
+}
+
+.final-sub { font-size: 12px; color: #404040; }
+
+.receipt {
+  border: 1px solid #000;
+  background: #f8f8e8;
+  padding: 10px 12px;
+  font-family: "Courier New", monospace;
+  font-size: 12px;
+}
+
+.receipt .receipt-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 2px 0;
+}
+
+.receipt .receipt-total {
+  border-top: 1px dashed #000;
+  margin-top: 6px;
+  padding-top: 6px;
+  font-weight: 700;
+}
+
+.alert-text { font-size: 13px; margin: 4px 0 10px; }
+
+.hint-inline {
+  font-size: 11.5px;
+  color: #404040;
+  margin: 0 0 8px;
+}
+
+/* --- Адаптив --- */
+
+@media (max-width: 1180px) {
+  .layout { grid-template-columns: 240px minmax(0, 1fr) 280px; }
+}
+
+@media (max-width: 980px) {
+  .crt { padding: 6px; }
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .col-right { order: 3; }
+  .log { max-height: 40vh; }
+  .app-window { min-height: auto; }
+  .titlebar-date { display: none; }
+}
+
+@media (max-width: 620px) {
+  body { font-size: 12px; }
+  .actions { grid-template-columns: minmax(0, 1fr); }
+  .overlay { padding: 6px; }
+  .titlebar-text { font-size: 11px; }
+  table.grid th.hide-sm, table.grid td.hide-sm { display: none; }
+  .status-cell:not(.status-cell-grow) { display: none; }
+  /* На узком экране «Закрыть» должен быть под большим пальцем, а не под
+     тулбаром: подвал прилипает к низу, столбец кнопок растягивается. */
+  .dialog-actions { padding-bottom: max(10px, env(safe-area-inset-bottom)); }
+  .dialog-actions button { min-height: 34px; }
+
+  /* Таблицы на телефоне: четыре видимые колонки («Курс», «Знания», «Цена»,
+     кнопка) обязаны влезать в ширину окна. Длинные примечания переносятся,
+     а узкие отступы экономят ровно те пиксели, которых не хватало кнопке
+     «Заниматься» — иначе она уезжает за правый край и её не нажать. */
+  table.grid th, table.grid td { padding-left: 3px; padding-right: 3px; }
+  table.grid td:first-child { overflow-wrap: anywhere; }
+  table.grid button { padding-left: 7px; padding-right: 7px; }
+}
+
+/* v3: выпадающие списки плана недели не должны расширять панель на телефоне */
+.row select { max-width: 100%; min-width: 0; flex: 1 1 auto; }
+.row { flex-wrap: wrap; }
+@media (max-width: 900px) {
+  .row select { font-size: 12px; }
+}
+.row .value { min-width: 0; max-width: 100%; }
+.row .value select { display: block; width: 100%; max-width: 100%; }
+.week-plan { display: block; }
+.week-plan .value { display: block; width: 100%; }
+.week-plan select { width: 100%; }

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>КОМПЬЮТЕРЩИК'98</title>
+  <meta name="description" content="Ретро-игра: работа → деньги → апгрейд ПК. 1998 год.">
+  <link rel="stylesheet" href="styles/retro.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%23008080'/><rect x='2' y='3' width='12' height='8' fill='%23c0c0c0' stroke='%23000'/><rect x='5' y='13' width='6' height='2' fill='%23c0c0c0'/></svg>">
+</head>
+<body>
+  <div class="crt">
+    <div class="desktop">
+      <div class="window app-window">
+        <div class="titlebar">
+          <span class="titlebar-icon" aria-hidden="true">▣</span>
+          <span class="titlebar-text">КОМПЬЮТЕРЩИК'98</span>
+          <span class="titlebar-spacer"></span>
+          <span class="titlebar-date" id="title-date">1 января 1998</span>
+          <span class="titlebar-buttons" aria-hidden="true">
+            <span class="tb-btn">_</span><span class="tb-btn">□</span><span class="tb-btn">×</span>
+          </span>
+        </div>
+
+        <div class="window-body">
+          <div class="layout">
+            <aside class="col col-left">
+              <div id="panel-diary"></div>
+              <div id="panel-hero"></div>
+              <div id="panel-job"></div>
+            </aside>
+
+            <main class="col col-center">
+              <div id="panel-pc"></div>
+              <div id="panel-actions"></div>
+            </main>
+
+            <aside class="col col-right">
+              <div id="panel-log"></div>
+            </aside>
+          </div>
+        </div>
+
+        <div class="statusbar">
+          <span class="status-cell status-cell-grow" id="status-hint">Добро пожаловать в 1998 год.</span>
+          <span class="status-cell" id="status-power">мощность: 0</span>
+          <span class="status-cell" id="status-cash">$0</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay hidden" id="overlay" role="presentation">
+    <div class="window dialog" id="dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title"></div>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
