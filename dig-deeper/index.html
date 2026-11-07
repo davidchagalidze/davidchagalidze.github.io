@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+<meta name="theme-color" content="#151a26" />
+<meta name="description" content="Dig Deeper — копай, продай, прокачай. Ремейк I Dig It с давлением глубины." />
+<title>Dig Deeper — копай, продай, прокачай</title>
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" href="icons/icon-192.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="app">
+
+  <!-- ═══ Меню ═══ -->
+  <section id="menu" class="screen menu">
+    <div class="logo">
+      <h1>Dig Deeper</h1>
+      <p class="tagline">Копай → продай → прокачай</p>
+    </div>
+    <div class="menu-card">
+      <button id="btn-continue" class="btn primary big hidden">Продолжить забег</button>
+      <button id="btn-new" class="btn primary big">Новая игра</button>
+      <button id="btn-free" class="btn big">Свободная игра</button>
+      <label class="toggle"><input type="checkbox" id="chk-hardcore" /> <span>Хардкор: смерть = потеря прогресса</span></label>
+      <p id="menu-stats" class="hint"></p>
+      <p class="hint small">Управление: стрелки / WASD, ↑ или пробел — подъём на поверхность, R или «🗑 Сброс» — выбросить дешёвую руду. На телефоне — кнопки внизу: ▲ подъём, ◀ ▼ ▶ ход.</p>
+    </div>
+  </section>
+
+  <!-- ═══ Игра ═══ -->
+  <section id="game" class="screen game hidden">
+    <canvas id="canvas"></canvas>
+
+    <div id="hud">
+      <div class="hud-top">
+        <div class="chip"><span class="k">Глубина</span><b id="hud-depth">0 м</b></div>
+        <div class="chip"><span class="k">Давление</span><b id="hud-pressure">1.00 / 2.00</b><i id="hud-safe">держит до 300 м</i></div>
+        <div class="chip money"><span class="k">Банк</span><b id="hud-money">$0</b></div>
+      </div>
+      <div class="hud-bars">
+        <div class="bar fuel"><span class="bl">Топливо</span><div class="track"><i id="bar-fuel"></i></div><b id="fuel-val">110</b></div>
+        <div class="bar hull"><span class="bl">Корпус</span><div class="track"><i id="bar-hull"></i></div><b id="hull-val">100</b></div>
+        <div class="bar temp"><span class="bl">Температура</span><div class="track"><i id="bar-temp"></i></div><b id="temp-val">0°</b></div>
+      </div>
+      <div class="hud-bottom">
+        <div class="chip"><span class="k">Трюм</span><b id="hud-cargo">0 / 12</b></div>
+        <div class="chip"><span class="k">Долг</span><b id="hud-debt">$100 000</b><i id="hud-due">платёж через 5</i></div>
+        <div class="chip"><span class="k">Слой</span><b id="hud-layer">Грунт</b><i id="hud-face"></i></div>
+      </div>
+    </div>
+
+    <div id="warn" class="warn hidden"></div>
+    <div id="toasts" class="toasts"></div>
+
+    <div id="gear-dock" class="gear-dock"></div>
+
+    <div id="controls" class="controls">
+      <div class="pad">
+        <button class="btn-dir" data-hold="rocket" aria-label="вверх, к поверхности">▲</button>
+        <button class="btn-dir" data-hold="left" aria-label="влево">◀</button>
+        <button class="btn-dir" data-hold="down" aria-label="вниз">▼</button>
+        <button class="btn-dir" data-hold="right" aria-label="вправо">▶</button>
+      </div>
+      <div class="actions">
+        <button id="btn-drill" class="btn-big drill" data-hold="down" aria-label="бур вниз">БУР</button>
+        <button id="btn-rocket" class="btn-big rocket" data-hold="rocket" aria-label="вверх, на поверхность">
+          <span class="arrow" aria-hidden="true">↑</span><span class="label">ВВЕРХ</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="corner-buttons">
+      <button id="btn-pause" class="btn tiny" aria-label="пауза">⏸ Меню</button>
+      <button id="btn-dump" class="btn tiny" aria-label="сбросить дешёвый груз">🗑 Сброс</button>
+      <button id="btn-dev" class="btn tiny hidden">DEV</button>
+    </div>
+
+    <div id="devbar" class="devbar hidden">
+      <span>Отладка:</span>
+      <button data-dev="money">+$5 000</button>
+      <button data-dev="tiers">+1 тир всем</button>
+      <button data-dev="deep">на 1 400 м</button>
+      <button data-dev="debt">закрыть долг</button>
+      <button data-dev="die">заглохнуть</button>
+    </div>
+  </section>
+
+  <!-- ═══ Город ═══ -->
+  <section id="town" class="screen town hidden">
+    <header class="town-head">
+      <div>
+        <h2>Ферма Льюиса</h2>
+        <p class="hint" id="town-day">День 1 · следующий платёж через 5 забегов</p>
+        <p class="hint" id="town-mine">ствол: 0 м · шахта не тронута</p>
+      </div>
+      <div class="bank">
+        <span class="k">Банк</span>
+        <b id="town-money">$0</b>
+      </div>
+    </header>
+
+    <div id="town-report" class="report"></div>
+
+    <div id="town-service" class="service"></div>
+
+    <nav class="tabs">
+      <button data-tab="upgrades" class="tab-btn active">Прокачка</button>
+      <button data-tab="gear" class="tab-btn">Снаряжение</button>
+      <button data-tab="debt" class="tab-btn">Ипотека</button>
+    </nav>
+
+    <div id="tab-upgrades" class="tab-body"></div>
+    <div id="tab-gear" class="tab-body hidden"></div>
+    <div id="tab-debt" class="tab-body hidden"></div>
+
+    <footer class="town-foot">
+      <button id="btn-dive" class="btn primary big">В забой</button>
+    </footer>
+  </section>
+
+  <!-- ═══ Итог / модалка ═══ -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-card">
+      <h2 id="modal-title">Заголовок</h2>
+      <div id="modal-body"></div>
+      <div id="modal-actions" class="modal-actions"></div>
+    </div>
+  </div>
+
+</div>
+<script type="module" src="src/main.mjs"></script>
+</body>
+</html>
